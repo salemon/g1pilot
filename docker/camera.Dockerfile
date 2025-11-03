@@ -16,6 +16,12 @@ RUN apt-get update && apt-get install -yy \
     terminator \
     git \
     gedit \
+    libxinerama-dev \
+    libxcursor-dev \
+    libxi-dev \
+    libxrandr-dev \
+    # libglu1-mesa-dev \
+    libxi-dev \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --upgrade pip
@@ -34,7 +40,7 @@ RUN apt install v4l-utils -y
 RUN ./scripts/setup_udev_rules.sh
 RUN mkdir build && cd build && \
     cmake ../ -DBUILD_EXAMPLES=true -DCMAKE_BUILD_TYPE=Release && \
-    make -j4 && make install
+    make && make install
     
 WORKDIR /ros2_ws/src
 RUN git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-master
@@ -52,6 +58,3 @@ RUN sysctl net.ipv4.ipfrag_high_thresh=134217728
 RUN echo "export FASTDDS_BUILTIN_TRANSPORTS=LARGE_DATA?max_msg_size=1MB&soets_size=1MB&non_blocking=true&tcp_negotiation_timeout=50" >> ~/.bashrc
 
 RUN echo "export ROS_DOMAIN_ID=1" >> ~/.bashrc
-
-
-CMD ["bash"]
